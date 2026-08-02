@@ -247,6 +247,17 @@
 
         </section>
 
+        <hr class="my-5">
+
+        @foreach($categories as $category)
+
+            @foreach($category->cards as $card)
+
+                <x-homepage.card :card="$card" />
+
+            @endforeach
+
+        @endforeach
 
     </div>
 </div>
