@@ -4,8 +4,8 @@ namespace App\Repositories;
 
 class PortalRepository
 {
-    public function getHomepage()
+    public function getHomepage(): array
     {
-        //
+        return [];
     }
 }

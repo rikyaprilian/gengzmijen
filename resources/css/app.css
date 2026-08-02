@@ -3,8 +3,7 @@
 
 @import "./variables.css";
 @import "./portal.css";
-@import "tailwindcss";
-@import "./card.css";
-@import "./category.css";
+@import "./cards.css";
+@import "./categories.css";
 @import "./manage.css";
 @import "./modal.css";
