@@ -106,3 +106,16 @@ Card
 ↓
 
 CardLink
+
+| Feature       | Status |
+| ------------- | ------ |
+| Homepage      | ✅      |
+| Category      | 🚧     |
+| Card          | 🚧     |
+| Multi Link    | 🚧     |
+| Expired       | 🚧     |
+| Security Code | 🚧     |
+| Drag & Drop   | ⏳      |
+| Import JSON   | ⏳      |
+| Export JSON   | ⏳      |
+| Backup        | ⏳      |
