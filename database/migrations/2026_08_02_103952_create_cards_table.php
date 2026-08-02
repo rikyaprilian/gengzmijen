@@ -11,27 +11,34 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-
+        Schema::create('cards', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('category_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
 
             $table->uuid('uuid')->unique();
 
-            $table->string('slug')->unique();
+            $table->string('title');
 
-            $table->string('name');
+            $table->text('description')->nullable();
 
-            $table->string('icon')->default('folder');
+            $table->string('thumbnail')->nullable();
 
-            $table->string('color')->default('blue');
+            $table->string('badge')->nullable();
 
-            $table->integer('sort_order')->default(0);
+            $table->unsignedInteger('sort_order')->default(0);
 
             $table->boolean('is_active')->default(true);
+
+            $table->timestamp('expired_at')->nullable();
 
             $table->timestamps();
 
             $table->softDeletes();
+            
         });
     }
 
@@ -40,6 +47,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('cards');
     }
 };

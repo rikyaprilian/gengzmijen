@@ -11,21 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-
+        Schema::create('card_links', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('card_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
             $table->uuid('uuid')->unique();
 
-            $table->string('slug')->unique();
+            $table->string('title');
 
-            $table->string('name');
+            $table->text('url');
 
-            $table->string('icon')->default('folder');
+            $table->string('icon')->nullable();
 
-            $table->string('color')->default('blue');
-
-            $table->integer('sort_order')->default(0);
+            $table->unsignedInteger('sort_order')->default(0);
 
             $table->boolean('is_active')->default(true);
 
@@ -40,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('card_links');
     }
 };
