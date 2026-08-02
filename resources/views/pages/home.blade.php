@@ -40,209 +40,214 @@
             <i class="bi bi-search"></i>
 
             <input
+                id="homepage-search"
                 type="text"
-                placeholder="Cari aplikasi...">
+                class="search-input"
+                placeholder="Cari aplikasi..."
+                autocomplete="off">
 
         </div>
 
     </section>
 
-    <section class="links">
+    <div id="homepage-links">
 
-        <a
-            href="https://sipgn-siphr.bgn.go.id/"
-            target="_blank"
-            class="app-card">
+        <section class="links">
 
-            <div class="app-left">
+            <a
+                href="https://sipgn-siphr.bgn.go.id/"
+                target="_blank"
+                class="app-card">
 
-                <div class="app-icon">
-                    <i class="bi bi-people"></i>
-                </div>
+                <div class="app-left">
 
-                <div>
-
-                    <div class="app-title">
-                        SIPGN SIPHR
+                    <div class="app-icon">
+                        <i class="bi bi-people"></i>
                     </div>
 
-                    <div class="app-subtitle">
-                        Absensi
-                    </div>
+                    <div>
 
-                </div>
+                        <div class="app-title">
+                            SIPGN SIPHR
+                        </div>
 
-            </div>
+                        <div class="app-subtitle">
+                            Absensi
+                        </div>
 
-            <button
-                class="copy-btn"
-                data-url="https://sipgn-siphr.bgn.go.id/">
-
-                <i class="bi bi-copy"></i>
-
-            </button>
-
-        </a>
-
-    </section>
-
-    <section class="links">
-
-        <a
-            href="https://portal-sipgn.bgn.go.id/dashboard"
-            target="_blank"
-            class="app-card">
-
-            <div class="app-left">
-
-                <div class="app-icon">
-                    <i class="bi bi-people"></i>
-                </div>
-
-                <div>
-
-                    <div class="app-title">
-                        Portal Dashboard SIPGN
-                    </div>
-
-                    <div class="app-subtitle">
-                        Portal
                     </div>
 
                 </div>
 
-            </div>
+                <button
+                    class="copy-btn"
+                    data-url="https://sipgn-siphr.bgn.go.id/">
 
-            <button
-                class="copy-btn"
-                data-url="https://portal-sipgn.bgn.go.id/dashboard">
+                    <i class="bi bi-copy"></i>
 
-                <i class="bi bi-copy"></i>
+                </button>
 
-            </button>
+            </a>
 
-        </a>
+        </section>
 
-    </section>
+        <section class="links">
 
-    <section class="links">
+            <a
+                href="https://portal-sipgn.bgn.go.id/dashboard"
+                target="_blank"
+                class="app-card">
 
-        <a
-            href="https://mpm-sipgn.bgn.go.id/dashboard"
-            target="_blank"
-            class="app-card">
+                <div class="app-left">
 
-            <div class="app-left">
-
-                <div class="app-icon">
-                    <i class="bi bi-people"></i>
-                </div>
-
-                <div>
-
-                    <div class="app-title">
-                        MPM SIPGN
+                    <div class="app-icon">
+                        <i class="bi bi-people"></i>
                     </div>
 
-                    <div class="app-subtitle">
-                        Management Penerima Manfaat
-                    </div>
+                    <div>
 
-                </div>
+                        <div class="app-title">
+                            Portal Dashboard SIPGN
+                        </div>
 
-            </div>
+                        <div class="app-subtitle">
+                            Portal
+                        </div>
 
-            <button
-                class="copy-btn"
-                data-url="https://mpm-sipgn.bgn.go.id/dashboard">
-
-                <i class="bi bi-copy"></i>
-
-            </button>
-
-        </a>
-
-    </section>
-
-    <section class="links">
-
-        <a
-            href="https://pop-sipgn.bgn.go.id/cooking"
-            target="_blank"
-            class="app-card">
-
-            <div class="app-left">
-
-                <div class="app-icon">
-                    <i class="bi bi-people"></i>
-                </div>
-
-                <div>
-
-                    <div class="app-title">
-                        POP SIPGN
-                    </div>
-
-                    <div class="app-subtitle">
-                        Point of Production (PWA PoP)
                     </div>
 
                 </div>
 
-            </div>
+                <button
+                    class="copy-btn"
+                    data-url="https://portal-sipgn.bgn.go.id/dashboard">
 
-            <button
-                class="copy-btn"
-                data-url="https://pop-sipgn.bgn.go.id/cooking">
+                    <i class="bi bi-copy"></i>
 
-                <i class="bi bi-copy"></i>
+                </button>
 
-            </button>
+            </a>
 
-        </a>
+        </section>
 
-    </section>
+        <section class="links">
 
-    <section class="links">
+            <a
+                href="https://mpm-sipgn.bgn.go.id/dashboard"
+                target="_blank"
+                class="app-card">
 
-        <a
-            href="https://tauwascare.tauwas.bgn.go.id/login"
-            target="_blank"
-            class="app-card">
+                <div class="app-left">
 
-            <div class="app-left">
-
-                <div class="app-icon">
-                    <i class="bi bi-people"></i>
-                </div>
-
-                <div>
-
-                    <div class="app-title">
-                        Tawuascare
+                    <div class="app-icon">
+                        <i class="bi bi-people"></i>
                     </div>
 
-                    <div class="app-subtitle">
-                        Tauwas
+                    <div>
+
+                        <div class="app-title">
+                            MPM SIPGN
+                        </div>
+
+                        <div class="app-subtitle">
+                            Management Penerima Manfaat
+                        </div>
+
                     </div>
 
                 </div>
 
-            </div>
+                <button
+                    class="copy-btn"
+                    data-url="https://mpm-sipgn.bgn.go.id/dashboard">
 
-            <button
-                class="copy-btn"
-                data-url="https://tauwascare.tauwas.bgn.go.id/login">
+                    <i class="bi bi-copy"></i>
 
-                <i class="bi bi-copy"></i>
+                </button>
 
-            </button>
+            </a>
 
-        </a>
+        </section>
 
-    </section>
+        <section class="links">
+
+            <a
+                href="https://pop-sipgn.bgn.go.id/cooking"
+                target="_blank"
+                class="app-card">
+
+                <div class="app-left">
+
+                    <div class="app-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <div>
+
+                        <div class="app-title">
+                            POP SIPGN
+                        </div>
+
+                        <div class="app-subtitle">
+                            Point of Production (PWA PoP)
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="copy-btn"
+                    data-url="https://pop-sipgn.bgn.go.id/cooking">
+
+                    <i class="bi bi-copy"></i>
+
+                </button>
+
+            </a>
+
+        </section>
+
+        <section class="links">
+
+            <a
+                href="https://tauwascare.tauwas.bgn.go.id/login"
+                target="_blank"
+                class="app-card">
+
+                <div class="app-left">
+
+                    <div class="app-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <div>
+
+                        <div class="app-title">
+                            Tawuascare
+                        </div>
+
+                        <div class="app-subtitle">
+                            Tauwas
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="copy-btn"
+                    data-url="https://tauwascare.tauwas.bgn.go.id/login">
+
+                    <i class="bi bi-copy"></i>
+
+                </button>
+
+            </a>
+
+        </section>
 
 
+    </div>
 </div>
-
 @endsection
