@@ -1,0 +1,780 @@
+/* ===========================
+   Portal Pelaporan BGN
+=========================== */
+
+:root{
+    --primary:#0f172a;
+    --blue:#2563eb;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --border:#e5e7eb;
+    --text:#111827;
+    --muted:#64748b;
+    --shadow:0 10px 30px rgba(15,23,42,.06);
+    --radius:22px;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+}
+
+/* Container */
+
+.portal-container{
+    max-width:1150px;
+}
+
+/* Navbar */
+
+.portal-navbar{
+
+    background:#fff;
+
+    border-bottom:1px solid #eef2f7;
+
+    padding:18px 0;
+}
+
+/* Logo */
+
+/* .logo-box{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:14px;
+
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:800;
+
+    font-size:18px;
+
+    letter-spacing:.5px;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.18);
+
+    user-select:none;
+} */
+
+.logo-box{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+}
+
+.navbar-logo{
+
+    width:48px;
+
+    height:48px;
+
+    object-fit:contain;
+
+    user-select:none;
+
+    pointer-events:none;
+}
+
+/* Hero */
+
+.hero{
+
+    padding:70px 0 10px;
+}
+
+/* .hero-logo{
+
+    width:64px;
+    height:64px;
+
+    border-radius:18px;
+
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+    font-weight:800;
+
+    margin:auto;
+
+    box-shadow:0 18px 40px rgba(15,23,42,.18);
+} */
+
+.hero-logo{
+
+    width:72px;
+
+    height:72px;
+
+    margin:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.hero-logo-image{
+
+    width:72px;
+
+    height:72px;
+
+    object-fit:contain;
+
+    user-select:none;
+
+    pointer-events:none;
+}
+
+.hero h1{
+
+    margin-top:22px;
+
+    font-size:38px;
+
+    font-weight:700;
+}
+
+.hero p{
+
+    max-width:520px;
+
+    margin:auto;
+
+    margin-bottom:8px;
+
+    line-height:1.5;
+
+    color:#64748B;
+
+    font-size:14px;
+}
+
+/* ===========================
+   Link Card
+=========================== */
+
+/* .link-card{
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:24px;
+
+    transition:.25s;
+
+    border:1px solid #edf2f7;
+
+    box-shadow:0 8px 20px rgba(15,23,42,.05);
+
+    height:100%;
+} */
+
+/* .link-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 20px 40px rgba(15,23,42,.12);
+} */
+
+/* .link-icon{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#eff6ff;
+
+    color:#2563eb;
+
+    font-size:26px;
+} */
+
+/* .link-title{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    margin-top:18px;
+} */
+
+/* .link-desc{
+
+    color:#64748b;
+
+    min-height:48px;
+} */
+
+/* .card-actions{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:20px;
+} */
+
+/* ==========================
+   APP CARD
+========================== */
+
+.app-card{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    text-decoration:none;
+
+    background:var(--white);
+
+    border-radius:18px;
+
+    padding:14px 18px;
+
+    margin-bottom:14px;
+
+    box-shadow:0 8px 22px rgba(15,23,42,.05);
+
+    transition:.2s ease;
+
+    border:1px solid #EDF2F7;
+
+}
+
+.app-card:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 18px 35px rgba(15,23,42,.10);
+
+    text-decoration:none;
+}
+
+.app-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+}
+
+.app-icon{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#EFF6FF;
+
+    color:#2563EB;
+
+    font-size:18px;
+
+    flex-shrink:0;
+}
+
+.app-title{
+
+    font-size:15px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+    margin-bottom:2px;
+}
+
+.app-subtitle{
+
+    font-size:12px;
+
+    color:#64748B;
+}
+
+.copy-btn{
+
+    width:34px;
+
+    height:34px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    transition:.2s;
+
+    color:#64748B;
+}
+
+.copy-btn:hover{
+
+    background:#2563EB;
+
+    color:white;
+}
+
+/* .action-btn{
+
+    width:44px;
+
+    height:44px;
+
+    border-radius:14px;
+
+    border:none;
+
+    background:#f8fafc;
+
+    transition:.25s;
+}
+
+.action-btn:hover{
+
+    background:#2563eb;
+
+    color:white;
+} */
+
+/* ==================================
+   Layout
+================================== */
+
+.portal-wrapper{
+
+    width:100%;
+
+    max-width:720px;
+
+    margin:auto;
+
+    padding:20px 18px 40px;
+}
+
+/* ==================================
+Hero
+================================== */
+
+.hero{
+
+    text-align:center;
+    /* margin-bottom:20px; */
+
+}
+
+.hero h1{
+
+    margin-top:12px;
+
+    margin-bottom:6px;
+
+    font-size:34px;
+
+    font-weight:800;
+
+    color:#111827;
+}
+
+.hero p{
+
+    max-width:520px;
+
+    margin:auto;
+
+    line-height:1.7;
+
+    color:#64748B;
+
+    font-size:15px;
+}
+
+/* ==================================
+Search
+================================== */
+
+.search-section{
+
+    margin-bottom:18px;
+}
+
+.search-box{
+
+    background:white;
+
+    height:58px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 20px;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.05);
+
+    border:1px solid #E8EEF5;
+}
+
+.search-box i{
+
+    color:#94A3B8;
+
+    font-size:20px;
+
+    margin-right:14px;
+}
+
+.search-box input{
+
+    border:none;
+
+    outline:none;
+
+    width:100%;
+
+    font-size:15px;
+
+    background:transparent;
+}
+
+/* =======================================
+   Link Card v2
+======================================= */
+
+.link-card{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    background:var(--white);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    padding:18px 22px;
+
+    margin-bottom:18px;
+
+    box-shadow:var(--shadow-sm);
+
+    transition:var(--transition);
+}
+
+.link-card:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:var(--shadow-lg);
+
+    border-color:#D7E5FF;
+}
+
+/* kiri */
+
+.link-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+}
+
+/* icon */
+
+.link-icon{
+
+    width:52px;
+
+    height:52px;
+
+    border-radius:16px;
+
+    background:#EFF6FF;
+
+    color:var(--primary);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:22px;
+
+    flex-shrink:0;
+}
+
+/* text */
+
+.link-title{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    margin-bottom:4px;
+}
+
+.link-description{
+
+    color:var(--text-secondary);
+
+    font-size:14px;
+}
+
+/* kanan */
+
+.link-right{
+
+    display:flex;
+
+    gap:10px;
+}
+
+.icon-button{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#F8FAFC;
+
+    transition:var(--transition);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#64748B;
+}
+
+.icon-button:hover{
+
+    background:var(--primary);
+
+    color:white;
+}
+
+/* ===================================
+   HEADER
+=================================== */
+
+.portal-navbar{
+
+    background:#fff;
+
+    height:72px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+}
+
+.portal-title{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    line-height:1.2;
+}
+
+.portal-subtitle{
+
+    font-size:13px;
+
+    color:var(--text-secondary);
+
+    margin-top:2px;
+}
+
+.navbar-logo{
+
+    width:46px;
+
+    height:46px;
+
+    object-fit:contain;
+}
+
+.manage-button{
+
+    height:42px;
+
+    padding:0 18px;
+
+    border-radius:14px;
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    transition:var(--transition);
+
+    box-shadow:var(--shadow-sm);
+}
+
+.manage-button:hover{
+
+    background:var(--primary);
+
+    color:white;
+
+    text-decoration:none;
+
+    transform:translateY(-1px);
+}
+
+/* =======================================
+   VERIFY MODAL
+======================================= */
+
+.verify-box{
+
+    max-width:420px;
+
+    margin:auto;
+
+    text-align:center;
+}
+
+.verify-icon{
+
+    width:72px;
+
+    height:72px;
+
+    border-radius:22px;
+
+    background:#EFF6FF;
+
+    color:#2563EB;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:28px;
+
+    margin:auto;
+
+    margin-bottom:24px;
+}
+
+.verify-box h4{
+
+    font-weight:700;
+
+    margin-bottom:10px;
+}
+
+.verify-box p{
+
+    color:#64748B;
+
+    margin-bottom:28px;
+}
+
+.verify-input{
+
+    height:52px;
+
+    border-radius:16px;
+
+    margin-bottom:18px;
+}
+
+.verify-button{
+
+    width:100%;
+
+    height:50px;
+
+    border-radius:16px;
+
+    font-weight:600;
+}
