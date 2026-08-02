@@ -21,13 +21,13 @@
 
         <h1>
 
-            Portal Pelaporan BGN
+            {{ $settings['portal_name'] }}
 
         </h1>
 
         <p>
 
-            <i>Karya Gengz Mijen</i>
+            <i>{{ $settings['homepage_message'] }}</i>
 
         </p>
 
@@ -203,44 +203,44 @@
 
     </section>
 
-<section class="links">
+    <section class="links">
 
-    <a
-        href="https://tauwascare.tauwas.bgn.go.id/login"
-        target="_blank"
-        class="app-card">
+        <a
+            href="https://tauwascare.tauwas.bgn.go.id/login"
+            target="_blank"
+            class="app-card">
 
-        <div class="app-left">
+            <div class="app-left">
 
-            <div class="app-icon">
-                <i class="bi bi-people"></i>
-            </div>
-
-            <div>
-
-                <div class="app-title">
-                    Tawuascare
+                <div class="app-icon">
+                    <i class="bi bi-people"></i>
                 </div>
 
-                <div class="app-subtitle">
-                    Tauwas
+                <div>
+
+                    <div class="app-title">
+                        Tawuascare
+                    </div>
+
+                    <div class="app-subtitle">
+                        Tauwas
+                    </div>
+
                 </div>
 
             </div>
 
-        </div>
+            <button
+                class="copy-btn"
+                data-url="https://tauwascare.tauwas.bgn.go.id/login">
 
-        <button
-            class="copy-btn"
-            data-url="https://tauwascare.tauwas.bgn.go.id/login">
+                <i class="bi bi-copy"></i>
 
-            <i class="bi bi-copy"></i>
+            </button>
 
-        </button>
+        </a>
 
-    </a>
-
-</section>
+    </section>
 
 
 </div>

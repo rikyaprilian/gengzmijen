@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\HomepageRepository;
+use App\Repositories\SettingRepository;
 
 class HomepageController extends Controller
 {
     public function __construct(
-        protected HomepageRepository $repository
+        protected HomepageRepository $homepageRepository,
+        protected SettingRepository $settingRepository,
     ) {
     }
 
     public function index()
     {
-        $categories = $this->repository->getHomepageData();
-
-        return view('homepage.index', compact('categories'));
+        return view('pages.home', [
+            'categories' => $this->homepageRepository->getHomepageData(),
+            'settings'   => $this->settingRepository->getAll(),
+        ]);
     }
 }
