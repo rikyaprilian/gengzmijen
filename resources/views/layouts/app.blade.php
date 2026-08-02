@@ -48,10 +48,10 @@
                         <h5 class="fw-bold mb-0">
                             Portal Pelaporan BGN
                         </h5>
-
+<!-- 
                         <small class="text-secondary">
                             Tautan Harian Operasional
-                        </small>
+                        </small> -->
 
                     </div>
 
