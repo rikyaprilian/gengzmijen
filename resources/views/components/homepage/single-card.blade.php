@@ -5,7 +5,7 @@
 <a
     href="{{ $link->url }}"
     target="_blank"
-    class="portal-item">
+    class="app-card">
 
     <div class="app-left">
 

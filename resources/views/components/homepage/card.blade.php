@@ -2,62 +2,58 @@
     'card',
 ])
 
-<section class="links">
+@if($card->links->count() === 1)
 
-    @if($card->links->count() === 1)
+    <x-homepage.single-card
+        :link="$card->links->first()" />
 
-        @php
-            $link = $card->links->first();
-        @endphp
+@else
 
-        <x-homepage.child-card
-            :link="$link" />
+<section class="portal-group">
 
-    @else
+    <div class="portal-group-header parent-toggle">
 
-        <div class="app-parent-card parent-toggle">
+        <div class="app-left">
 
-            <div class="app-left">
+            <div class="app-icon">
 
-                <div class="app-icon">
+                <i class="bi bi-grid"></i>
 
-                    <i class="bi bi-grid"></i>
+            </div>
+
+            <div>
+
+                <div class="app-title">
+
+                    {{ $card->title }}
 
                 </div>
 
-                <div>
+                <div class="app-subtitle">
 
-                    <div class="app-title">
-
-                        {{ $card->title }}
-
-                    </div>
-
-                    <div class="app-subtitle">
-
-                        {{ $card->description }}
-
-                    </div>
+                    {{ $card->description }}
 
                 </div>
 
             </div>
 
-            <i class="bi bi-chevron-down parent-arrow"></i>
-
         </div>
 
-        <div class="child-links d-none">
+        <i class="bi bi-chevron-down portal-arrow"></i>
 
-            @foreach($card->links as $link)
+    </div>
 
-                <x-homepage.child-card
-                    :link="$link" />
+    <div class="portal-group-body d-none">
 
-            @endforeach
+        @foreach($card->links as $link)
 
-        </div>
+            <x-homepage.child-card
+                :link="$link"/>
 
-    @endif
+        @endforeach
+
+    </div>
 
 </section>
+
+@endif
