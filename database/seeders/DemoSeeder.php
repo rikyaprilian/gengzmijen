@@ -71,25 +71,39 @@ class DemoSeeder extends Seeder
     {
         foreach ($cards as $key => $card) {
 
-            $category = $this->categories[$card['category']];
-
             $model = Card::updateOrCreate(
 
                 [
-                    'category_id' => $category->id,
                     'title' => $card['title'],
                 ],
-
+            
                 [
-                    'category_id' => $category->id,
+                    'category_id' => $this->categories[$card['categories'][0]]->id, // sementara untuk kompatibilitas
+            
                     'title' => $card['title'],
+            
                     'description' => $card['description'],
+            
                     'badge' => $card['badge'],
+            
                     'sort_order' => $card['sort_order'],
+            
                     'is_active' => $card['is_active'],
+            
                     'expired_at' => $card['expired_at'],
+            
                 ]
+            
+            );
 
+            $model->categories()->sync(
+
+                collect($card['categories'])
+            
+                    ->map(fn ($slug) => $this->categories[$slug]->id)
+            
+                    ->toArray()
+            
             );
 
             $this->cards[$key] = $model;

@@ -893,15 +893,17 @@ Search
 
 .portal-group-body{
 
-    border-top:1px solid #EDF2F7;
+    max-height:0;
+
+    overflow:hidden;
+
+    transition:max-height .35s ease;
 
 }
 
 .portal-arrow{
 
-    font-size:20px;
-
-    transition:.25s;
+    transition:transform .3s ease;
 
 }
 
@@ -956,5 +958,107 @@ Search
 .portal-item:hover{
 
     background:#F8FAFC;
+
+}
+
+.portal-group-header{
+
+    transition:background .25s ease;
+
+}
+
+.portal-group-header:hover{
+
+    background:#fafafa;
+
+}
+
+.portal-arrow{
+
+    transition:transform .35s ease;
+
+}
+
+.portal-arrow.rotate{
+
+    transform:rotate(180deg);
+
+}
+
+.category-tabs{
+
+    display:flex;
+
+    gap:10px;
+
+    overflow-x:auto;
+
+    margin:22px 0;
+
+    padding-bottom:4px;
+
+}
+
+.category-chip{
+
+    border:none;
+
+    background:transparent;
+
+    padding:8px 14px;
+
+    border-radius:12px;
+
+    font-size:.88rem;
+
+    font-weight:600;
+
+    color:#64748B;
+
+    cursor:pointer;
+
+    white-space:nowrap;
+
+    transition:.2s;
+
+}
+
+.category-chip:hover{
+
+    background:#EFF6FF;
+
+    color:#2563EB;
+
+}
+
+.category-chip.active{
+
+    background:#2563EB;
+
+    color:#fff;
+
+}
+
+.category-filter{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:6px;
+
+    margin:18px 0 22px;
+
+    background:#fff;
+
+    border:1px solid #EDF2F7;
+
+    border-radius:16px;
+
+    box-shadow:0 6px 18px rgba(15,23,42,.04);
+
+    overflow-x:auto;
 
 }

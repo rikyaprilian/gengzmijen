@@ -1,11 +1,15 @@
 @props([
-    'link',
+'link',
 ])
 
 <a
     href="{{ $link->url }}"
     target="_blank"
-    class="app-card">
+    class="app-card"
+    data-card
+    data-type="single"
+    data-category="{{ $link->card->categories->pluck('slug')->implode(',') }}"
+    data-search="{{ $link->search_text }}">
 
     <div class="app-left">
 

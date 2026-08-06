@@ -10,6 +10,7 @@ class Link extends Model
 {
     //
     use SoftDeletes, HasUuids;
+    protected $table = 'card_links';
 
     public function uniqueIds(): array
     {
@@ -20,4 +21,6 @@ class Link extends Model
     {
         return 'uuid';
     }
+
+   
 }

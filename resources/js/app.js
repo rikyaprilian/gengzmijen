@@ -1,16 +1,12 @@
-// import './bootstrap';
-
 import '../css/app.css';
-// import './bootstrap';
-// import '../css/app.css';
 
-import './portal';
+import './homepage/accordion';
+import './category';
 import './search';
-import './modal';
-import './manage';
-import './dragdrop';
+
+import './admin/manage';
+import './admin/dragdrop';
 
 import * as bootstrap from 'bootstrap';
-
 
 window.bootstrap = bootstrap;

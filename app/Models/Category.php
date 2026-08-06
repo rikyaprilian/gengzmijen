@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
@@ -36,9 +37,9 @@ class Category extends Model
         'is_active' => 'boolean',
     ];
 
-    public function cards(): HasMany
+    public function cards(): BelongsToMany
     {
-        return $this->hasMany(Card::class)
-            ->orderBy('sort_order');
+        return $this->belongsToMany(Card::class);
     }
+
 }

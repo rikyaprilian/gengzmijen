@@ -5,7 +5,9 @@
 <a
     href="{{ $link->url }}"
     target="_blank"
-    class="portal-item">
+    class="portal-item"
+    data-link
+    data-search="{{ $link->search_text }}">
 
     <div class="app-left">
 

@@ -10,14 +10,20 @@ class HomepageController extends Controller
     public function __construct(
         protected HomepageRepository $homepageRepository,
         protected SettingRepository $settingRepository,
-    ) {
-    }
+    ) {}
 
     public function index()
     {
+        $data = $this->homepageRepository->getHomepageData();
+
         return view('pages.home', [
-            'categories' => $this->homepageRepository->getHomepageData(),
+
+            'cards'      => $data['cards'],
+
+            'categories' => $data['categories'],
+
             'settings'   => $this->settingRepository->getAll(),
+
         ]);
     }
 }

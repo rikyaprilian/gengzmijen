@@ -9,3 +9,14 @@
 
 - Menambahkan Backup
 - Menambahkan Import JSON
+
+2026-08-06
+
+Added:
+- Multi Category
+- card_category pivot
+- HomepageRepository refactor
+
+Changed:
+- Search Engine
+- Category Filter

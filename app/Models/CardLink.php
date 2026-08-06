@@ -22,6 +22,17 @@ class CardLink extends Model
         return 'uuid';
     }
 
+    public function getSearchTextAttribute(): string
+    {
+        return collect([
+            $this->title,
+            $this->subtitle,
+        ])
+            ->filter()
+            ->map(fn($text) => mb_strtolower(trim($text)))
+            ->implode(' ');
+    }
+
     protected $fillable = [
 
         'uuid',

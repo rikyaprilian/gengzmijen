@@ -27,6 +27,19 @@ return [
     */
 
     'categories' => [
+        'harian' => [
+
+            'name' => 'Harian',
+
+            'icon' => 'house',
+
+            'color' => 'primary',
+
+            'sort_order' => 0,
+
+            'is_active' => true,
+
+        ],
 
         'meeting' => [
 
@@ -82,7 +95,13 @@ return [
 
         'sipgn' => [
 
-            'category' => 'pelaporan',
+            'categories' => [
+
+                'harian',
+
+                'pelaporan',
+
+            ],
 
             'title' => 'SIPGN',
 
@@ -100,7 +119,13 @@ return [
 
         'tauwas-care' => [
 
-            'category' => 'pelaporan',
+            'categories' => [
+
+                'harian',
+
+                'pelaporan',
+
+            ],
 
             'title' => 'Tauwas Care',
 
@@ -116,6 +141,31 @@ return [
 
         ],
 
+
+
+        'tauwas-care' => [
+
+            'categories' => [
+
+                'harian',
+
+                'pelaporan',
+
+            ],
+
+            'title' => 'Tauwas Care',
+
+            'description' => 'Portal Tauwas',
+
+            'badge' => null,
+
+            'sort_order' => 2,
+
+            'is_active' => true,
+
+            'expired_at' => null,
+
+        ],
     ],
 
     /*
