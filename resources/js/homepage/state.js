@@ -4,4 +4,6 @@ export default {
 
     category: "harian",
 
+    editMode: false,
+
 };

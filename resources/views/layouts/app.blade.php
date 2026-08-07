@@ -59,6 +59,7 @@
 
                 <a
                     href="#"
+                    id="portalManageButton"
                     class="manage-button"
                     data-bs-toggle="modal"
                     data-bs-target="#manageModal">
@@ -67,7 +68,7 @@
 
                     <span>
 
-                        Kelola Link
+                        Kelola Portal
 
                     </span>
 

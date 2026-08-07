@@ -4,8 +4,8 @@ import './homepage/accordion';
 import './category';
 import './search';
 
-import './admin/manage';
-import './admin/dragdrop';
+import './manage/auth';
+import './manage/drag-card';
 
 import * as bootstrap from 'bootstrap';
 
