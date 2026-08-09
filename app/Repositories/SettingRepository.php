@@ -11,7 +11,14 @@ class SettingRepository
         $setting = PortalSetting::query()->first();
 
         if (! $setting) {
-            return [];
+            return [
+                'portal_name'      => 'Portal Link BGN',
+                'homepage_message' => 'Tautan Harian Operasional BGN',
+                'security_code'    => 'gass',
+                'logo'             => null,
+                'favicon'          => null,
+                'maintenance'      => false,
+            ];
         }
 
         return [

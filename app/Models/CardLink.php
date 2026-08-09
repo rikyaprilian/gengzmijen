@@ -34,25 +34,16 @@ class CardLink extends Model
     }
 
     protected $fillable = [
-
         'uuid',
-    
         'card_id',
-    
         'title',
-    
         'subtitle',
-    
         'url',
-    
         'icon',
-    
+        'color',
         'sort_order',
-    
         'is_active',
-    
         'expired_at',
-    
     ];
 
     protected $casts = [

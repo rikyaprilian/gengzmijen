@@ -13,20 +13,16 @@ class PortalSettingSeeder extends Seeder
      */
     public function run(): void
     {
-        PortalSetting::create([
-
-            'portal_name' => 'Portal Pelaporan BGN',
-
-            'homepage_message' => 'Selamat datang di Portal Pelaporan BGN',
-
-            'security_code' => Hash::make('123456'),
-
-            'logo' => null,
-
-            'favicon' => null,
-
-            'maintenance' => false,
-
-        ]);
+        PortalSetting::updateOrCreate(
+            ['id' => 1],
+            [
+                'portal_name' => 'Portal Link BGN',
+                'homepage_message' => 'Tautan Harian Operasional BGN',
+                'security_code' => 'gass',
+                'logo' => null,
+                'favicon' => null,
+                'maintenance' => false,
+            ]
+        );
     }
 }

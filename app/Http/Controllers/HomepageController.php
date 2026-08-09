@@ -22,7 +22,7 @@ class HomepageController extends Controller
 
             'categories' => $data['categories'],
 
-            'settings'   => $this->settingRepository->getAll(),
+            'settings'   => $data['settings'],
 
         ]);
     }

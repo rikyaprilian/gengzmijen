@@ -17,13 +17,27 @@ class ManageAuthController extends Controller
 
     public function login(Request $request)
     {
-        // sementara
+        $request->validate([
+            'security_code' => 'required|string',
+        ]);
+
+        $setting = \App\Models\PortalSetting::first();
+        $validCode = $setting ? $setting->security_code : 'gass';
+
+        if ($request->input('security_code') !== $validCode) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode Edit / Security Code tidak valid.',
+            ], 401);
+        }
+
         session([
             'portal_edit_mode' => true
         ]);
 
         return response()->json([
             'success' => true,
+            'message' => 'Berhasil masuk ke Edit Mode.',
             'editMode' => true
         ]);
     }

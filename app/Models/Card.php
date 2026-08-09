@@ -45,6 +45,7 @@ class Card extends Model
         'title',
         'description',
         'badge',
+        'color',
         'sort_order',
         'is_active',
         'expired_at',

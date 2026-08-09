@@ -25,7 +25,7 @@
 
             <div class="modal-body py-5">
 
-                <div class="verify-box">
+                <form id="manageLoginForm" class="verify-box">
 
                     <div class="verify-icon">
 
@@ -41,23 +41,25 @@
 
                     <p>
 
-                        Masukkan kode keamanan untuk mengelola daftar link.
+                        Masukkan kode keamanan untuk masuk ke Mode Edit Portal.
 
                     </p>
 
                     <input
                         type="password"
                         class="form-control verify-input"
-                        autocomplete="off"
-                        placeholder="Kode Edit">
+                        autocomplete="current-password"
+                        placeholder="Security Code (Default: gass)">
+
+                    <div id="manageLoginError" class="alert alert-danger py-2 d-none mt-3"></div>
 
                     <button
-                        type="button"
+                        type="submit"
                         class="btn btn-primary verify-button">
-                        Masuk
+                        Masuk Mode Edit
                     </button>
 
-                </div>
+                </form>
 
             </div>
 

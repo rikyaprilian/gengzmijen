@@ -1,30 +1,36 @@
-import state from "../homepage/state";
-import { setEditMode } from "./edit-mode";
+import { setEditMode, logoutEditMode } from "./edit-mode";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const button = document.querySelector(".verify-button");
+    const keepEditMode = sessionStorage.getItem("portal_keep_edit_mode");
+    if (keepEditMode === "1") {
+        sessionStorage.removeItem("portal_keep_edit_mode");
+        setEditMode(true);
+    } else {
+        setEditMode(false);
+        logoutEditMode();
+    }
 
-    if (!button) return;
-
-    button.addEventListener("click", login);
+    // Form submit (Enter key atau klik tombol)
+    const form = document.getElementById("manageLoginForm");
+    if (form) {
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            login();
+        });
+    }
 
 });
 
 async function login() {
 
     const input = document.querySelector(".verify-input");
-
-    const code = input.value.trim();
+    const code = input ? input.value.trim() : "";
 
     if (code === "") {
-
-        alert("Kode Edit harus diisi.");
-
-        input.focus();
-
+        showError("Kode Edit harus diisi.");
+        if (input) input.focus();
         return;
-
     }
 
     buttonLoading(true);
@@ -32,55 +38,40 @@ async function login() {
     try {
 
         const response = await fetch("/manage/login", {
-
             method: "POST",
-
             headers: {
-
                 "Content-Type": "application/json",
-
                 "Accept": "application/json",
-
                 "X-CSRF-TOKEN": document
                     .querySelector('meta[name="csrf-token"]')
-                    .content
-
+                    .content,
             },
-
-            body: JSON.stringify({
-
-                security_code: code
-
-            })
-
+            body: JSON.stringify({ security_code: code }),
         });
 
         const result = await response.json();
 
         if (!result.success) {
-
-            alert(result.message ?? "Kode Edit salah.");
-
+            showError(result.message ?? "Security Code salah. Periksa kembali.");
             buttonLoading(false);
-
             return;
-
         }
 
+        // Sukses: tutup modal dan aktifkan Edit Mode
+        const modal = bootstrap.Modal.getInstance(
+            document.getElementById("manageModal")
+        );
+        if (modal) modal.hide();
+
+        // Bersihkan input
+        if (input) input.value = "";
+
         setEditMode(true);
-
-        // sementara
-        // nanti kita ganti menjadi renderEditMode();
-
-        bootstrap.Modal
-            .getInstance(document.getElementById("manageModal"))
-            .hide();
 
     } catch (error) {
 
         console.error(error);
-
-        alert("Terjadi kesalahan.");
+        showError("Terjadi kesalahan koneksi. Silakan coba lagi.");
 
     }
 
@@ -97,7 +88,20 @@ function buttonLoading(status) {
     button.disabled = status;
 
     button.innerHTML = status
-        ? "Memproses..."
-        : "Masuk";
+        ? '<span class="spinner-border spinner-border-sm me-1"></span>Memproses...'
+        : "Masuk Mode Edit";
+
+}
+
+function showError(message) {
+
+    const errorEl = document.getElementById("manageLoginError");
+    if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.remove("d-none");
+    } else {
+        // Fallback
+        alert(message);
+    }
 
 }

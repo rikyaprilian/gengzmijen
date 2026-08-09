@@ -33,6 +33,18 @@ class DemoSeeder extends Seeder
 
     protected function seedSettings(array $settings): void
     {
+        \App\Models\PortalSetting::updateOrCreate(
+            ['id' => 1],
+            [
+                'portal_name' => $settings['portal_name'] ?? 'Portal Link BGN',
+                'homepage_message' => $settings['homepage_message'] ?? 'Tautan Harian Operasional BGN',
+                'security_code' => 'gass',
+                'logo' => null,
+                'favicon' => null,
+                'maintenance' => false,
+            ]
+        );
+
         foreach ($settings as $key => $value) {
 
             Setting::updateOrCreate(

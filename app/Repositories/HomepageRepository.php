@@ -8,18 +8,32 @@ use App\Models\PortalSetting;
 
 class HomepageRepository
 {
+    public function __construct(
+        protected SettingRepository $settingRepository,
+    ) {}
+
     public function getHomepageData(): array
     {
-        return [
+        $setting = PortalSetting::first();
+        if (! $setting) {
+            $setting = new PortalSetting($this->settingRepository->getAll());
+        }
 
-            'settings' => PortalSetting::query()->first(),
+        return [
+            'settings' => $setting,
 
             'cards' => Card::query()
                 ->with([
-                    'links',
+                    'links' => function ($query) {
+                        $query->orderBy('sort_order');
+                    },
                     'categories',
                 ])
                 ->where('is_active', true)
+                ->where(function ($q) {
+                    $q->whereNull('expired_at')
+                      ->orWhere('expired_at', '>', now());
+                })
                 ->orderBy('sort_order')
                 ->get(),
 
@@ -27,7 +41,6 @@ class HomepageRepository
                 ->where('is_active', true)
                 ->orderBy('sort_order')
                 ->get(),
-
         ];
     }
 }

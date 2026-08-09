@@ -10,11 +10,11 @@ return [
 
     'settings' => [
 
-        'portal_name' => 'Portal Gengz Mijen',
+        'portal_name' => 'Portal Link BGN',
 
-        'security_code' => '123456',
+        'security_code' => 'gass',
 
-        'homepage_message' => 'Selamat Datang',
+        'homepage_message' => 'Tautan Harian Operasional BGN',
 
         'theme' => 'default',
 
@@ -129,33 +129,7 @@ return [
 
             'title' => 'Tauwas Care',
 
-            'description' => 'Portal Tauwas',
-
-            'badge' => null,
-
-            'sort_order' => 2,
-
-            'is_active' => true,
-
-            'expired_at' => null,
-
-        ],
-
-
-
-        'tauwas-care' => [
-
-            'categories' => [
-
-                'harian',
-
-                'pelaporan',
-
-            ],
-
-            'title' => 'Tauwas Care',
-
-            'description' => 'Portal Tauwas',
+            'description' => 'Portal Tauwas Care Operasional',
 
             'badge' => null,
 
