@@ -1,6 +1,6 @@
 <div class="modal fade"
-     id="manageModal"
-     tabindex="-1">
+    id="manageModal"
+    tabindex="-1">
 
     <div class="modal-dialog modal-xl modal-dialog-centered">
 
@@ -48,13 +48,13 @@
                     <input
                         type="password"
                         class="form-control verify-input"
-                        placeholder="Security Code">
+                        autocomplete="off"
+                        placeholder="Kode Edit">
 
                     <button
+                        type="button"
                         class="btn btn-primary verify-button">
-
                         Masuk
-
                     </button>
 
                 </div>
