@@ -48,8 +48,7 @@
                     <input
                         type="password"
                         class="form-control verify-input"
-                        autocomplete="current-password"
-                        placeholder="Security Code (Default: gass)">
+                        autocomplete="current-password">
 
                     <div id="manageLoginError" class="alert alert-danger py-2 d-none mt-3"></div>
 

@@ -31,7 +31,7 @@
                                 <i class="bi bi-eye-slash" id="secCodeEyeIcon"></i>
                             </button>
                         </div>
-                        <small class="text-muted">Kode keamanan ini digunakan untuk masuk ke Mode Edit saat menekan tombol "Kelola Portal". Default: <code>gass</code></small>
+                        <small class="text-muted">Kode keamanan ini digunakan untuk masuk ke Mode Edit saat menekan tombol "Kelola Portal".></small>
                     </div>
                 </div>
                 <div class="modal-footer bg-light">

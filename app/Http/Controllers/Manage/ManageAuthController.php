@@ -22,9 +22,12 @@ class ManageAuthController extends Controller
         ]);
 
         $setting = \App\Models\PortalSetting::first();
+        // $validCode = $setting ? $setting->security_code : 'gass';
         $validCode = $setting ? $setting->security_code : 'gass';
+        
 
         if ($request->input('security_code') !== $validCode) {
+            print_r($setting);
             return response()->json([
                 'success' => false,
                 'message' => 'Kode Edit / Security Code tidak valid.',
