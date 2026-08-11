@@ -6,7 +6,7 @@
 
     <button
         type="button"
-        class="category-chip"
+        class="category-chip active"
         data-category="all">
 
         Semua
@@ -17,7 +17,7 @@
 
         <button
             type="button"
-            class="category-chip {{ $category->slug === 'harian' ? 'active' : '' }}"
+            class="category-chip"
             data-category="{{ $category->slug }}">
 
             {{ $category->name }}
