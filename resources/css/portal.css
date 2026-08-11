@@ -281,6 +281,8 @@ body{
 
     border:1px solid #EDF2F7;
 
+    margin-bottom:18px;
+
 }
 
 .app-card:hover{
@@ -921,7 +923,7 @@ Search
 
     justify-content:space-between;
 
-    padding:6px 22px;
+    padding:10px 22px;
 
     text-decoration:none;
 
