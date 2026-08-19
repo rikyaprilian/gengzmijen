@@ -3,6 +3,7 @@ import '../css/app.css';
 import './homepage/accordion';
 import './category';
 import './search';
+import './copy';
 
 import './manage/auth';
 import './manage/crud';

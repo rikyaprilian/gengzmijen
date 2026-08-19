@@ -368,6 +368,54 @@ body {
     color: white;
 }
 
+.copy-btn.copied {
+
+    background: #10B981 !important;
+
+    color: white !important;
+
+    transform: scale(1.08);
+}
+
+.copy-flash-toast {
+
+    position: fixed;
+
+    bottom: 24px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: #0f172a;
+
+    color: #ffffff;
+
+    padding: 8px 18px;
+
+    border-radius: 50px;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    z-index: 99999;
+
+    white-space: nowrap;
+
+    max-width: 90vw;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+
+    display: none;
+
+    pointer-events: none;
+}
+
 /* .action-btn{
 
     width:44px;
