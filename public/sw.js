@@ -1,35 +1,31 @@
-const CACHE_NAME = 'portal-bgn-cache-v1';
-const urlsToCache = [
-  '/',
-  '/images/logo-bgn.png'
-];
+// ======================================================
+// Service Worker PWA - Strategy: Network Only (No Cache)
+// Menjamin aplikasi PWA selalu mengambil data & tampilan terbaru dari server
+// tanpa menyimpan cache lokal di penyimpanan HP pengguna.
+// ======================================================
 
+// Saat Service Worker di-install, lewati pemuatan cache
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-      .then(() => self.skipWaiting())
-  );
+  self.skipWaiting();
 });
 
+// Saat Service Worker aktif, bersihkan SEMUA cache lama di device pengguna
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cache => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
-          }
-        })
+        cacheNames.map(cache => caches.delete(cache))
       );
     }).then(() => self.clients.claim())
   );
 });
 
+// Setiap request selalu ambil langsung dari server/network tanpa menyimpan cache
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    fetch(event.request)
-      .catch(() => caches.match(event.request))
+    fetch(event.request, { cache: 'no-store' })
+      .catch(() => fetch(event.request))
   );
 });
