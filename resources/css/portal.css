@@ -96,39 +96,6 @@ body {
     pointer-events: none;
 }
 
-/* Hero */
-
-.hero {
-
-    padding: 70px 0 10px;
-}
-
-/* .hero-logo{
-
-    width:64px;
-    height:64px;
-
-    border-radius:18px;
-
-    background:linear-gradient(135deg,#0f172a,#1e293b);
-
-    color:white;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:24px;
-
-    font-weight:800;
-
-    margin:auto;
-
-    box-shadow:0 18px 40px rgba(15,23,42,.18);
-} */
-
 .hero-logo {
 
     width: 72px;

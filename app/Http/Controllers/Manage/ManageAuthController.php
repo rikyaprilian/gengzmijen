@@ -27,7 +27,6 @@ class ManageAuthController extends Controller
         
 
         if ($request->input('security_code') !== $validCode) {
-            print_r($setting);
             return response()->json([
                 'success' => false,
                 'message' => 'Kode Edit / Security Code tidak valid.',
