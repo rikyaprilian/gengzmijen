@@ -4,6 +4,7 @@ import Sortable from "sortablejs";
 
 // Simpan semua instance Sortable agar bisa dihancurkan saat mode edit dinonaktifkan
 let sortableInstances = [];
+let isProcessingDrag = false;
 
 export function setEditMode(enabled) {
 
@@ -54,6 +55,7 @@ function updateNavbar() {
 function initSortable() {
 
     destroySortable(); // Pastikan tidak ada duplikat
+    isProcessingDrag = false;
 
     // 1. Sortable untuk Cards Container (Root)
     const cardsContainer = document.querySelector(".cards-sortable-container");
@@ -67,21 +69,6 @@ function initSortable() {
             group: {
                 name: "cards",
                 put: ["links"], // Menerima link yang ditarik keluar dari grup menjadi kartu baru
-            },
-            onAdd: async (evt) => {
-                // Tangkap event ketika link dari dalam grup dijatuhkan ke cardsContainer
-                if (evt.item.hasAttribute("data-link")) {
-                    const linkUuid = evt.item.dataset.uuid;
-                    const cardOrder = [...cardsContainer.children]
-                        .map(el => {
-                            if (el.hasAttribute("data-card")) return el.dataset.uuid;
-                            if (el.hasAttribute("data-link")) return el.dataset.uuid;
-                            return null;
-                        })
-                        .filter(Boolean);
-
-                    await detachLinkToCard(linkUuid, evt.newIndex, cardOrder);
-                }
             },
             onEnd: async (evt) => {
                 // Reorder kartu biasa di level root
@@ -149,7 +136,6 @@ function initSortable() {
 
 }
 
-
 function destroySortable() {
     sortableInstances.forEach(s => s.destroy());
     sortableInstances = [];
@@ -190,6 +176,8 @@ async function saveLinkOrder(uuids) {
 }
 
 async function moveLinkToCard(linkUuid, cardUuid, newOrder) {
+    if (isProcessingDrag) return;
+    isProcessingDrag = true;
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
     try {
         const res = await fetch(`/manage/links/${linkUuid}/move`, {
@@ -207,13 +195,17 @@ async function moveLinkToCard(linkUuid, cardUuid, newOrder) {
             window.location.reload();
         } else {
             console.error("Gagal memindahkan tautan:", data.message);
+            isProcessingDrag = false;
         }
     } catch (e) {
         console.error("Gagal memindahkan tautan:", e);
+        isProcessingDrag = false;
     }
 }
 
 async function detachLinkToCard(linkUuid, newIndex, cardOrder) {
+    if (isProcessingDrag) return;
+    isProcessingDrag = true;
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
     try {
         const res = await fetch(`/manage/links/${linkUuid}/detach`, {
@@ -231,11 +223,14 @@ async function detachLinkToCard(linkUuid, newIndex, cardOrder) {
             window.location.reload();
         } else {
             console.error("Gagal memisahkan tautan:", data.message);
+            isProcessingDrag = false;
         }
     } catch (e) {
         console.error("Gagal memisahkan tautan:", e);
+        isProcessingDrag = false;
     }
 }
+
 
 
 export async function logoutEditMode() {
