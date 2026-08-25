@@ -190,7 +190,7 @@ class ManagePortalController extends Controller
             'expired_at'     => 'nullable|date|after:today',
             'links'          => 'required|array|min:1',
             'links.*.title'  => 'required|string|max:255',
-            'links.*.url'    => 'required|url',
+            'links.*.url'    => 'required|string|max:2000',
             'links.*.subtitle'   => 'nullable|string|max:255',
             'links.*.icon'       => 'nullable|string|max:255',
             'links.*.color'      => 'nullable|string|max:255',
@@ -222,7 +222,7 @@ class ManagePortalController extends Controller
                 'card_id'    => $card->id,
                 'title'      => $linkData['title'],
                 'subtitle'   => $linkData['subtitle'] ?? null,
-                'url'        => $linkData['url'],
+                'url'        => $this->formatUrl($linkData['url']),
                 'icon'       => $linkData['icon'] ?? 'link-45deg',
                 'color'      => $linkData['color'] ?? null,
                 'sort_order' => $index + 1,
@@ -311,6 +311,33 @@ class ManagePortalController extends Controller
     // ==========================================
     // CARD LINKS
     // ==========================================
+    private function formatUrl(string $url): string
+    {
+        $url = trim($url);
+
+        // Jika diawali skema khusus seperti mailto:, tel:, whatsapp:, biarkan
+        if (Str::startsWith($url, ['mailto:', 'tel:', 'whatsapp://', 'tg://'])) {
+            return $url;
+        }
+
+        // Jika formatnya adalah email murni (misal: admin@gengzmijen.cloud)
+        if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
+            return 'mailto:' . $url;
+        }
+
+        // Jika hanya angka nomor telepon (misal: +628123456789 atau 08123456789)
+        if (preg_match('/^\+?[0-9\s\-()]{7,}$/', $url)) {
+            return 'tel:' . str_replace([' ', '-', '(', ')'], '', $url);
+        }
+
+        // Jika belum memiliki skema dan bukan path lokal/jangkar, tambahkan https://
+        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//', $url) && !Str::startsWith($url, ['/', '#'])) {
+            return 'https://' . $url;
+        }
+
+        return $url;
+    }
+
     public function storeLink(Request $request)
     {
         $this->ensureEditMode();
@@ -319,7 +346,7 @@ class ManagePortalController extends Controller
             'card_uuid'  => 'required|string|exists:cards,uuid',
             'title'      => 'required|string|max:255',
             'subtitle'   => 'nullable|string|max:255',
-            'url'        => 'required|url',
+            'url'        => 'required|string|max:2000',
             'icon'       => 'nullable|string|max:255',
             'color'      => 'nullable|string|max:255',
             'expired_at' => 'nullable|date|after:today',
@@ -333,7 +360,7 @@ class ManagePortalController extends Controller
             'card_id'    => $card->id,
             'title'      => $validated['title'],
             'subtitle'   => $validated['subtitle'] ?? null,
-            'url'        => $validated['url'],
+            'url'        => $this->formatUrl($validated['url']),
             'icon'       => $validated['icon'] ?? 'link-45deg',
             'color'      => $validated['color'] ?? null,
             'sort_order' => $maxSort + 1,
@@ -357,7 +384,7 @@ class ManagePortalController extends Controller
         $validated = $request->validate([
             'title'      => 'required|string|max:255',
             'subtitle'   => 'nullable|string|max:255',
-            'url'        => 'required|url',
+            'url'        => 'required|string|max:2000',
             'icon'       => 'nullable|string|max:255',
             'color'      => 'nullable|string|max:255',
             'is_active'  => 'nullable|boolean',
@@ -366,7 +393,7 @@ class ManagePortalController extends Controller
 
         $link->title      = $validated['title'];
         $link->subtitle   = $validated['subtitle'] ?? null;
-        $link->url        = $validated['url'];
+        $link->url        = $this->formatUrl($validated['url']);
         $link->icon       = $validated['icon'] ?? 'link-45deg';
         $link->color      = $validated['color'] ?? null;
         if (isset($validated['is_active'])) $link->is_active = $validated['is_active'];

@@ -24,11 +24,19 @@ export function initCopyEvents() {
             return;
         }
 
-        const success = await copyToClipboard(url);
+        // Jika berupa mailto: atau tel:, bersihkan prefix agar email/nomor telepon bersih saat di-paste
+        let textToCopy = url;
+        if (textToCopy.startsWith("mailto:")) {
+            textToCopy = textToCopy.replace(/^mailto:/i, "").split("?")[0];
+        } else if (textToCopy.startsWith("tel:")) {
+            textToCopy = textToCopy.replace(/^tel:/i, "");
+        }
+
+        const success = await copyToClipboard(textToCopy);
 
         if (success) {
             animateCopyButton(btn);
-            showCopyFlashMessage(url);
+            showCopyFlashMessage(textToCopy);
         }
     });
 }

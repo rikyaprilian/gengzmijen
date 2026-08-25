@@ -24,8 +24,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="linkUrl" class="form-label fw-bold">URL Tautan <span class="text-danger">*</span></label>
-                        <input type="url" class="form-control" id="linkUrl" name="url" required placeholder="https://contoh-link.bgn.go.id">
+                        <label for="linkUrl" class="form-label fw-bold">URL Tautan / Email / Telepon <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="linkUrl" name="url" required placeholder="https://... atau mailto:admin@domain.com atau tel:+62812...">
                     </div>
 
                     {{-- ICON PICKER --}}
@@ -93,8 +93,8 @@
 
                     <div class="mb-3">
                         <label for="linkExpiredAt" class="form-label fw-bold">Tanggal Kadaluarsa (Opsional)</label>
-                        <input type="datetime-local" class="form-control" id="linkExpiredAt" name="expired_at">
-                        <small class="text-muted">Kosongkan jika berlaku selamanya</small>
+                        <input type="date" class="form-control" id="linkExpiredAt" name="expired_at">
+                        <small class="text-muted">Kosongkan jika berlaku selamanya. Minimal besok.</small>
                     </div>
                 </div>
 

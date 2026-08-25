@@ -13,7 +13,10 @@
         <i class="bi bi-grip-vertical text-muted fs-6"></i>
     </div>
 
-    <a href="{{ $link->url }}" target="_blank" class="app-left text-decoration-none text-reset flex-grow-1">
+    @php
+        $isMailOrTel = \Illuminate\Support\Str::startsWith($link->url, ['mailto:', 'tel:']);
+    @endphp
+    <a href="{{ $link->url }}" target="{{ $isMailOrTel ? '_self' : '_blank' }}" class="app-left text-decoration-none text-reset flex-grow-1">
 
         <div class="app-icon {{ $link->color ? 'icon-badge-' . $link->color : '' }}">
             @if(\Illuminate\Support\Str::startsWith($link->icon, ['http://', 'https://', 'data:']) || \Illuminate\Support\Str::contains($link->icon, ['.png', '.svg', '.jpg', '.webp', '/']))

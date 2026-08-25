@@ -258,9 +258,9 @@ function addLinkRow() {
                    placeholder="Contoh: SIPGN, Absensi Harian" required>
         </div>
         <div class="mb-2">
-            <label class="form-label small fw-semibold">URL <span class="text-danger">*</span></label>
-            <input type="url" class="form-control form-control-sm link-url-input"
-                   placeholder="https://" required>
+            <label class="form-label small fw-semibold">URL / Email / Telepon <span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-sm link-url-input"
+                   placeholder="https://... atau mailto:nama@email.com atau tel:+62..." required>
         </div>
         <div class="mb-2">
             <label class="form-label small fw-semibold">Sub-judul / Keterangan (Opsional)</label>
