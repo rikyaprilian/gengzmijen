@@ -63,7 +63,7 @@
                         data-description="{{ $card->description }}"
                         data-badge="{{ $card->badge }}"
                         data-color="{{ $card->color }}"
-                        data-expired-at="{{ $card->expired_at ? $card->expired_at->format('Y-m-d\TH:i') : '' }}"
+                        data-expired-at="{{ $card->expired_at ? $card->expired_at->format('Y-m-d') : '' }}"
                         data-categories="{{ json_encode($card->categories->pluck('id')) }}"
                         title="Edit Kartu">
                     <i class="bi bi-pencil"></i>

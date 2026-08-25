@@ -42,12 +42,15 @@ Route::prefix('manage')->group(function () {
     // Cards
     Route::post('/cards', [ManagePortalController::class, 'storeCard'])
         ->name('manage.cards.store');
+    Route::post('/cards/with-links', [ManagePortalController::class, 'storeWithLinks'])
+        ->name('manage.cards.storeWithLinks');
     Route::put('/cards/{uuid}', [ManagePortalController::class, 'updateCard'])
         ->name('manage.cards.update');
     Route::delete('/cards/{uuid}', [ManagePortalController::class, 'destroyCard'])
         ->name('manage.cards.destroy');
     Route::post('/cards/reorder', [ManagePortalController::class, 'reorderCards'])
         ->name('manage.cards.reorder');
+
 
     // Links
     Route::post('/links', [ManagePortalController::class, 'storeLink'])
@@ -58,4 +61,21 @@ Route::prefix('manage')->group(function () {
         ->name('manage.links.destroy');
     Route::post('/links/reorder', [ManagePortalController::class, 'reorderLinks'])
         ->name('manage.links.reorder');
+    Route::patch('/links/{uuid}/move', [ManagePortalController::class, 'moveLink'])
+        ->name('manage.links.move');
+    Route::post('/links/{uuid}/detach', [ManagePortalController::class, 'detachLinkToCard'])
+        ->name('manage.links.detach');
+
+    // Archive
+    Route::get('/archived', [ManagePortalController::class, 'getArchived'])
+        ->name('manage.archived');
+    Route::post('/cards/{uuid}/restore', [ManagePortalController::class, 'restoreCard'])
+        ->name('manage.cards.restore');
+    Route::delete('/cards/{uuid}/force', [ManagePortalController::class, 'forceDeleteCard'])
+        ->name('manage.cards.force-delete');
+    Route::post('/links/{uuid}/restore', [ManagePortalController::class, 'restoreLink'])
+        ->name('manage.links.restore');
+    Route::delete('/links/{uuid}/force', [ManagePortalController::class, 'forceDeleteLink'])
+        ->name('manage.links.force-delete');
 });
+

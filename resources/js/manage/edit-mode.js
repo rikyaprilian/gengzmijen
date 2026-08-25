@@ -55,7 +55,7 @@ function initSortable() {
 
     destroySortable(); // Pastikan tidak ada duplikat
 
-    // Sortable untuk urutan Cards (level atas)
+    // 1. Sortable untuk Cards Container (Root)
     const cardsContainer = document.querySelector(".cards-sortable-container");
     if (cardsContainer) {
         const cardSortable = new Sortable(cardsContainer, {
@@ -64,17 +64,39 @@ function initSortable() {
             draggable: "[data-card]",
             ghostClass: "sortable-ghost",
             chosenClass: "sortable-chosen",
-            onEnd: (evt) => {
-                const uuids = [...cardsContainer.querySelectorAll("[data-card][data-uuid]")]
-                    .map(el => el.dataset.uuid)
-                    .filter(Boolean);
-                saveCardOrder(uuids);
+            group: {
+                name: "cards",
+                put: ["links"], // Menerima link yang ditarik keluar dari grup menjadi kartu baru
+            },
+            onAdd: async (evt) => {
+                // Tangkap event ketika link dari dalam grup dijatuhkan ke cardsContainer
+                if (evt.item.hasAttribute("data-link")) {
+                    const linkUuid = evt.item.dataset.uuid;
+                    const cardOrder = [...cardsContainer.children]
+                        .map(el => {
+                            if (el.hasAttribute("data-card")) return el.dataset.uuid;
+                            if (el.hasAttribute("data-link")) return el.dataset.uuid;
+                            return null;
+                        })
+                        .filter(Boolean);
+
+                    await detachLinkToCard(linkUuid, evt.newIndex, cardOrder);
+                }
+            },
+            onEnd: async (evt) => {
+                // Reorder kartu biasa di level root
+                if (evt.item.hasAttribute("data-card")) {
+                    const uuids = [...cardsContainer.querySelectorAll(":scope > [data-card][data-uuid]")]
+                        .map(el => el.dataset.uuid)
+                        .filter(Boolean);
+                    saveCardOrder(uuids);
+                }
             },
         });
         sortableInstances.push(cardSortable);
     }
 
-    // Sortable untuk urutan Links di dalam setiap card group
+    // 2. Sortable untuk Links Container (di dalam Group Card & Single Card)
     document.querySelectorAll(".links-sortable-container").forEach(container => {
         const linkSortable = new Sortable(container, {
             animation: 150,
@@ -82,17 +104,51 @@ function initSortable() {
             draggable: "[data-link]",
             ghostClass: "sortable-ghost",
             chosenClass: "sortable-chosen",
-            onEnd: (evt) => {
-                const uuids = [...container.querySelectorAll("[data-link][data-uuid]")]
-                    .map(el => el.dataset.uuid)
-                    .filter(Boolean);
-                saveLinkOrder(uuids);
+            group: {
+                name: "links",
+                pull: true,
+                put: ["links"], // Menerima link dari kartu mana pun
+            },
+            onEnd: async (evt) => {
+                const linkUuid     = evt.item.dataset.uuid;
+                const fromCardUuid = evt.from.dataset.cardUuid;
+                const toCardUuid   = evt.to.dataset.cardUuid;
+
+                // Kasus A: Link dijatuhkan keluar ke container kartu utama (detach jadi Single Card baru)
+                if (!toCardUuid || evt.to.classList.contains("cards-sortable-container")) {
+                    const rootCardsContainer = document.querySelector(".cards-sortable-container");
+                    const cardOrder = [...rootCardsContainer.children]
+                        .map(el => {
+                            if (el.hasAttribute("data-card")) return el.dataset.uuid;
+                            if (el.hasAttribute("data-link")) return el.dataset.uuid;
+                            return null;
+                        })
+                        .filter(Boolean);
+
+                    await detachLinkToCard(linkUuid, evt.newIndex, cardOrder);
+                    return;
+                }
+
+                // Kasus B: Link berpindah ke kartu lain (Single Card lain atau Group Card lain)
+                if (fromCardUuid !== toCardUuid) {
+                    const newOrder = [...evt.to.querySelectorAll("[data-link][data-uuid]")]
+                        .map(el => el.dataset.uuid)
+                        .filter(Boolean);
+                    await moveLinkToCard(linkUuid, toCardUuid, newOrder);
+                } else {
+                    // Kasus C: Hanya reorder dalam kartu yang sama
+                    const newOrder = [...container.querySelectorAll("[data-link][data-uuid]")]
+                        .map(el => el.dataset.uuid)
+                        .filter(Boolean);
+                    await saveLinkOrder(newOrder);
+                }
             },
         });
         sortableInstances.push(linkSortable);
     });
 
 }
+
 
 function destroySortable() {
     sortableInstances.forEach(s => s.destroy());
@@ -132,6 +188,55 @@ async function saveLinkOrder(uuids) {
         console.error("Gagal menyimpan urutan tautan:", e);
     }
 }
+
+async function moveLinkToCard(linkUuid, cardUuid, newOrder) {
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+    try {
+        const res = await fetch(`/manage/links/${linkUuid}/move`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrf,
+            },
+            body: JSON.stringify({ card_uuid: cardUuid, order: newOrder }),
+        });
+        const data = await res.json();
+        if (data.success) {
+            sessionStorage.setItem("portal_keep_edit_mode", "1");
+            window.location.reload();
+        } else {
+            console.error("Gagal memindahkan tautan:", data.message);
+        }
+    } catch (e) {
+        console.error("Gagal memindahkan tautan:", e);
+    }
+}
+
+async function detachLinkToCard(linkUuid, newIndex, cardOrder) {
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+    try {
+        const res = await fetch(`/manage/links/${linkUuid}/detach`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrf,
+            },
+            body: JSON.stringify({ new_index: newIndex, card_order: cardOrder }),
+        });
+        const data = await res.json();
+        if (data.success) {
+            sessionStorage.setItem("portal_keep_edit_mode", "1");
+            window.location.reload();
+        } else {
+            console.error("Gagal memisahkan tautan:", data.message);
+        }
+    } catch (e) {
+        console.error("Gagal memisahkan tautan:", e);
+    }
+}
+
 
 export async function logoutEditMode() {
     const csrf = document.querySelector('meta[name="csrf-token"]').content;

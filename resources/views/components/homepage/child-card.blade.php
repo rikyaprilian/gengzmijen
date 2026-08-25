@@ -6,9 +6,10 @@
     class="portal-item {{ $link->color ? 'link-theme-' . $link->color : '' }}"
     data-link
     data-uuid="{{ $link->uuid }}"
+    data-card-uuid="{{ $link->card->uuid }}"
     data-search="{{ $link->search_text }}">
 
-    <div class="link-drag-handle me-2 edit-mode-only" title="Geser untuk mengubah urutan">
+    <div class="link-drag-handle me-2 edit-mode-only" title="Geser untuk mengubah urutan atau pindah grup">
         <i class="bi bi-grip-vertical text-muted fs-6"></i>
     </div>
 
@@ -61,7 +62,7 @@
                     data-url="{{ $link->url }}"
                     data-icon="{{ $link->icon }}"
                     data-color="{{ $link->color }}"
-                    data-expired-at="{{ $link->expired_at ? $link->expired_at->format('Y-m-d\TH:i') : '' }}"
+                    data-expired-at="{{ $link->expired_at ? $link->expired_at->format('Y-m-d') : '' }}"
                     title="Edit Tautan">
                 <i class="bi bi-pencil"></i>
             </button>

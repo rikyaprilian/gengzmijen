@@ -25,17 +25,31 @@ class HomepageRepository
             'cards' => Card::query()
                 ->with([
                     'links' => function ($query) {
-                        $query->orderBy('sort_order');
+                        $query->orderBy('sort_order')
+                              ->where(function ($q) {
+                                  // Tampilkan link yang: tidak punya expired_at, ATAU expired_at >= hari ini
+                                  $q->whereNull('expired_at')
+                                    ->orWhere('expired_at', '>=', today());
+                              });
                     },
                     'categories',
                 ])
                 ->where('is_active', true)
                 ->where(function ($q) {
+                    // Card expired: tidak punya expired_at ATAU expired_at >= hari ini
                     $q->whereNull('expired_at')
-                      ->orWhere('expired_at', '>', now());
+                      ->orWhere('expired_at', '>=', today());
+                })
+                ->whereHas('links', function ($query) {
+                    // Hanya kartu yang memiliki minimal 1 tautan aktif
+                    $query->where(function ($q) {
+                        $q->whereNull('expired_at')
+                          ->orWhere('expired_at', '>=', today());
+                    });
                 })
                 ->orderBy('sort_order')
                 ->get(),
+
 
             'categories' => Category::query()
                 ->where('is_active', true)

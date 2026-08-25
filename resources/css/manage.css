@@ -33,9 +33,6 @@
     }
 }
 
-/* ==========================================
-   Edit Mode Body State
-   ========================================== */
 body.is-edit-mode [data-card],
 body.is-edit-mode [data-link] {
     outline: 1px dashed rgba(99, 102, 241, 0.3);
@@ -48,6 +45,13 @@ body.is-edit-mode [data-card]:hover,
 body.is-edit-mode [data-link]:hover {
     outline: 2px solid rgba(99, 102, 241, 0.5);
 }
+
+/* Saat group terbuka di mode edit, berikan min-height agar drop area nyaman */
+body.is-edit-mode .portal-group-body.open {
+    min-height: 48px;
+}
+
+
 
 /* ==========================================
    Drag Handle

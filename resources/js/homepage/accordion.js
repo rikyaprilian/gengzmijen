@@ -2,7 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll("[data-accordion]").forEach(header => {
 
-        header.addEventListener("click", () => {
+        header.addEventListener("click", (e) => {
+            if (e.target.closest("button") || e.target.closest("a") || e.target.closest(".card-drag-handle") || e.target.closest(".link-drag-handle") || e.target.closest(".edit-mode-actions")) {
+                return;
+            }
 
             const group = header.closest(".portal-group");
 

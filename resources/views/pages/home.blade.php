@@ -16,10 +16,13 @@
         </div>
         <div class="d-flex flex-wrap gap-2">
             <button type="button" class="btn btn-sm btn-success" id="btnAddCardModal">
-                <i class="bi bi-plus-circle me-1"></i>Tambah Kartu Baru
+                <i class="bi bi-plus-circle me-1"></i>Tambah Link / Group Link Baru
             </button>
             <button type="button" class="btn btn-sm btn-info text-white" id="btnManageCategoriesModal">
                 <i class="bi bi-tags me-1"></i>Kelola Kategori
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-warning" id="btnArchiveModal">
+                <i class="bi bi-archive me-1"></i>Arsip
             </button>
             <button type="button" class="btn btn-sm btn-outline-light" id="btnPortalSettingsModal">
                 <i class="bi bi-sliders me-1"></i>Pengaturan Portal
@@ -89,4 +92,7 @@
 
     </div>
 </div>
+
+<x-modals.archive-modal />
+
 @endsection

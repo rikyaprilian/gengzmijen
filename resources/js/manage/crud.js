@@ -18,6 +18,7 @@ const csrf = () =>
 document.addEventListener("DOMContentLoaded", () => {
 
     initCardEvents();
+    initUnifiedModal();
     initLinkEvents();
     initCategoryEvents();
     initSettingsEvents();
@@ -135,43 +136,306 @@ function initCardEvents() {
 
 function openCardModal(data = null) {
     const modal = new bootstrap.Modal(document.getElementById("cardModal"));
-    const title = document.getElementById("cardModalTitle");
-    const uuidField = document.getElementById("cardUuid");
-    const titleField = document.getElementById("cardTitle");
-    const descField = document.getElementById("cardDescription");
-    const badgeField = document.getElementById("cardBadge");
-    const expiredField = document.getElementById("cardExpiredAt");
+    const modalTitle = document.getElementById("cardModalTitle");
+    const unifiedForm = document.getElementById("unifiedLinkForm");
+    const editForm = document.getElementById("cardForm");
 
-    const colorField = document.getElementById("cardColor");
+    if (data) {
+        // ── MODE EDIT: tampilkan form lama, sembunyikan unified form ──
+        unifiedForm?.classList.add("d-none");
+        editForm?.classList.remove("d-none");
 
-    title.innerHTML = data
-        ? '<i class="bi bi-pencil-square me-2"></i>Edit Kartu Portal'
-        : '<i class="bi bi-card-heading me-2"></i>Tambah Kartu Portal';
+        modalTitle.innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Kartu Portal';
 
-    uuidField.value = data?.uuid ?? "";
-    titleField.value = data?.title ?? "";
-    descField.value = data?.description ?? "";
-    badgeField.value = data?.badge ?? "";
-    if (colorField) colorField.value = data?.color ?? "";
-    expiredField.value = data?.expired_at ?? "";
+        document.getElementById("cardUuid").value          = data.uuid ?? "";
+        document.getElementById("cardTitle").value         = data.title ?? "";
+        document.getElementById("cardDescription").value   = data.description ?? "";
+        document.getElementById("cardBadgeEdit").value     = data.badge ?? "";
+        document.getElementById("cardExpiredAtEdit").value = data.expired_at ?? "";
+        const colorEdit = document.getElementById("cardColorEdit");
+        if (colorEdit) colorEdit.value = data.color ?? "";
 
-    // Set checkboxes kategori
-    document.querySelectorAll('input[name="category_ids[]"]').forEach(cb => {
-        cb.checked = data?.categories?.includes(parseInt(cb.value)) || false;
-    });
+        // Set checkboxes kategori (edit form)
+        document.querySelectorAll('input[id^="cat_check_edit_"]').forEach(cb => {
+            cb.checked = data.categories?.includes(parseInt(cb.value)) || false;
+        });
+    } else {
+        // ── MODE TAMBAH: tampilkan unified form, sembunyikan edit form ──
+        editForm?.classList.add("d-none");
+        unifiedForm?.classList.remove("d-none");
+
+        modalTitle.innerHTML = '<i class="bi bi-plus-circle me-2"></i>Tambah Link / Group Link';
+
+        // Reset unified form
+        resetUnifiedForm();
+    }
 
     modal.show();
+}
+
+// ==========================================
+// UNIFIED MODAL LOGIC
+// ==========================================
+let linkRowCount = 0;
+
+function initUnifiedModal() {
+    // Tombol tambah link row
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest("#btnAddLinkRow")) return;
+        addLinkRow();
+        updateGroupSection();
+    });
+
+    // Hapus link row (delegasi)
+    document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".btn-remove-link-row");
+        if (!btn) return;
+        const row = btn.closest(".link-row-item");
+        if (row) row.remove();
+        updateGroupSection();
+        renumberLinkRows();
+    });
+
+    // Submit unified form
+    const form = document.getElementById("unifiedLinkForm");
+    if (form) {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            await saveUnifiedLinks();
+        });
+    }
+}
+
+function resetUnifiedForm() {
+    linkRowCount = 0;
+    const container = document.getElementById("linkRowsContainer");
+    if (container) container.innerHTML = "";
+
+    // Reset pengaturan lanjutan
+    ["cardBadge", "cardExpiredAt"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+    const colorEl = document.getElementById("cardColor");
+    if (colorEl) colorEl.value = "";
+
+    document.querySelectorAll('#cardCategoriesContainer input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+    });
+
+    // Reset group section
+    document.getElementById("groupTitle").value = "";
+    document.getElementById("groupDescription").value = "";
+    document.getElementById("groupSection")?.classList.add("d-none");
+
+    // Tutup advanced collapse
+    const advanced = document.getElementById("advancedCardSettings");
+    if (advanced) advanced.classList.remove("show");
+
+    // Tambah 1 link row awal
+    addLinkRow();
+}
+
+function addLinkRow() {
+    linkRowCount++;
+    const idx = linkRowCount;
+    const container = document.getElementById("linkRowsContainer");
+    if (!container) return;
+
+    const row = document.createElement("div");
+    row.className = "link-row-item border rounded p-3 mb-3 bg-light";
+    row.dataset.rowIdx = idx;
+    row.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-bold text-muted small">Link <span class="link-row-num">${idx}</span></span>
+            <button type="button" class="btn btn-sm btn-outline-danger btn-remove-link-row" title="Hapus link ini">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="mb-2">
+            <label class="form-label small fw-semibold">Judul Link <span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-sm link-title-input"
+                   placeholder="Contoh: SIPGN, Absensi Harian" required>
+        </div>
+        <div class="mb-2">
+            <label class="form-label small fw-semibold">URL <span class="text-danger">*</span></label>
+            <input type="url" class="form-control form-control-sm link-url-input"
+                   placeholder="https://" required>
+        </div>
+        <div class="mb-2">
+            <label class="form-label small fw-semibold">Sub-judul / Keterangan (Opsional)</label>
+            <input type="text" class="form-control form-control-sm link-subtitle-input"
+                   placeholder="Contoh: Sistem Informasi Kepegawaian">
+        </div>
+        <div class="row g-2">
+            <div class="col">
+                <label class="form-label small fw-semibold">Ikon</label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text link-icon-preview-wrap" style="min-width:36px;">
+                        <i class="bi bi-link-45deg link-icon-preview"></i>
+                    </span>
+                    <input type="text" class="form-control link-icon-input"
+                           placeholder="ri-file-line atau URL gambar" value="link-45deg">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-pick-icon"
+                            title="Pilih dari icon picker">
+                        <i class="bi bi-grid-3x3-gap"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-auto">
+                <label class="form-label small fw-semibold">Warna</label>
+                <select class="form-select form-select-sm link-color-input">
+                    <option value="">Default</option>
+                    <option value="blue">🔵 Blue</option>
+                    <option value="emerald">🟢 Emerald</option>
+                    <option value="purple">🟣 Purple</option>
+                    <option value="amber">🟡 Amber</option>
+                    <option value="rose">🔴 Rose</option>
+                    <option value="cyan">🔵 Cyan</option>
+                    <option value="orange">🟠 Orange</option>
+                    <option value="indigo">🔮 Indigo</option>
+                </select>
+            </div>
+        </div>
+    `;
+
+    container.appendChild(row);
+
+    // Live update icon preview di row ini
+    const iconInput = row.querySelector(".link-icon-input");
+    const iconPreview = row.querySelector(".link-icon-preview");
+    const iconWrap = row.querySelector(".link-icon-preview-wrap");
+    if (iconInput && iconPreview) {
+        iconInput.addEventListener("input", () => {
+            updateRowIconPreview(iconInput.value.trim(), iconPreview, iconWrap);
+        });
+    }
+
+    // Live update saat judul diketik (untuk auto-fill group title jika hanya 1 link)
+    const titleInput = row.querySelector(".link-title-input");
+    if (titleInput) {
+        titleInput.addEventListener("input", () => {
+            const rows = document.querySelectorAll(".link-row-item");
+            if (rows.length === 1) {
+                // Tidak ada group title saat 1 link, tapi tidak perlu sync apapun
+            }
+        });
+    }
+}
+
+function updateRowIconPreview(iconName, previewEl, wrapEl) {
+    if (!previewEl) return;
+    const isUrl = iconName.startsWith("http") || iconName.includes("/");
+    const isFa = iconName.startsWith("fa-") || iconName.startsWith("ri-");
+
+    if (isUrl) {
+        if (wrapEl) wrapEl.innerHTML = `<img src="${iconName}" style="width:20px;height:20px;object-fit:contain;">`;
+    } else if (isFa) {
+        if (wrapEl) wrapEl.innerHTML = `<i class="${iconName}"></i>`;
+    } else {
+        if (wrapEl) wrapEl.innerHTML = `<i class="bi bi-${iconName}"></i>`;
+    }
+}
+
+function updateGroupSection() {
+    const rows = document.querySelectorAll(".link-row-item");
+    const groupSection = document.getElementById("groupSection");
+    const groupTitleInput = document.getElementById("groupTitle");
+
+    if (rows.length >= 2) {
+        groupSection?.classList.remove("d-none");
+        if (groupTitleInput) groupTitleInput.required = true;
+    } else {
+        groupSection?.classList.add("d-none");
+        if (groupTitleInput) groupTitleInput.required = false;
+    }
+}
+
+function renumberLinkRows() {
+    document.querySelectorAll(".link-row-item").forEach((row, i) => {
+        const numEl = row.querySelector(".link-row-num");
+        if (numEl) numEl.textContent = i + 1;
+    });
+}
+
+async function saveUnifiedLinks() {
+    const rows = document.querySelectorAll(".link-row-item");
+    const isGroup = rows.length >= 2;
+
+    // Kumpulkan data links
+    const links = [];
+    let valid = true;
+    rows.forEach(row => {
+        const title    = row.querySelector(".link-title-input")?.value.trim();
+        const url      = row.querySelector(".link-url-input")?.value.trim();
+        const subtitle = row.querySelector(".link-subtitle-input")?.value.trim();
+        const icon     = row.querySelector(".link-icon-input")?.value.trim() || "link-45deg";
+        const color    = row.querySelector(".link-color-input")?.value || "";
+
+        if (!title || !url) { valid = false; return; }
+        links.push({ title, url, subtitle, icon, color });
+    });
+
+    if (!valid || links.length === 0) {
+        Swal.fire("Validasi", "Judul dan URL wajib diisi di semua link.", "warning");
+        return;
+    }
+
+    // Tentukan judul card
+    let cardTitle = "";
+    let cardDescription = "";
+    if (isGroup) {
+        cardTitle = document.getElementById("groupTitle")?.value.trim();
+        cardDescription = document.getElementById("groupDescription")?.value.trim();
+        if (!cardTitle) {
+            Swal.fire("Validasi", "Nama Group / Card wajib diisi karena ada lebih dari 1 link.", "warning");
+            return;
+        }
+    } else {
+        // Single link: judul card = judul link
+        cardTitle = links[0].title;
+    }
+
+    // Pengaturan lanjutan
+    const badge      = document.getElementById("cardBadge")?.value.trim() ?? "";
+    const color      = document.getElementById("cardColor")?.value ?? "";
+    const expired_at = document.getElementById("cardExpiredAt")?.value ?? "";
+    const category_ids = [...document.querySelectorAll('#cardCategoriesContainer input[type="checkbox"]:checked')]
+        .map(cb => parseInt(cb.value));
+
+    const payload = {
+        title: cardTitle,
+        description: cardDescription,
+        badge,
+        color,
+        expired_at,
+        category_ids,
+        links,
+    };
+
+    try {
+        const result = await apiRequest("/manage/cards/with-links", "POST", payload);
+        if (result.success) {
+            bootstrap.Modal.getInstance(document.getElementById("cardModal"))?.hide();
+            reloadAfterSuccess(result.message);
+        } else {
+            Swal.fire("Gagal", result.message ?? "Terjadi kesalahan.", "error");
+        }
+    } catch (err) {
+        Swal.fire("Error", "Terjadi kesalahan koneksi.", "error");
+    }
 }
 
 async function saveCard() {
     const uuid = document.getElementById("cardUuid").value;
     const title = document.getElementById("cardTitle").value.trim();
     const description = document.getElementById("cardDescription").value.trim();
-    const badge = document.getElementById("cardBadge").value.trim();
-    const color = document.getElementById("cardColor")?.value ?? "";
-    const expired_at = document.getElementById("cardExpiredAt").value;
-    const category_ids = [...document.querySelectorAll('input[name="category_ids[]"]:checked')]
+    const badge = document.getElementById("cardBadgeEdit")?.value.trim() ?? "";
+    const color = document.getElementById("cardColorEdit")?.value ?? "";
+    const expired_at = document.getElementById("cardExpiredAtEdit")?.value ?? "";
+    const category_ids = [...document.querySelectorAll('input[id^="cat_check_edit_"]:checked')]
         .map(cb => parseInt(cb.value));
+
 
     if (!title) {
         Swal.fire("Validasi", "Judul kartu wajib diisi.", "warning");
@@ -1128,3 +1392,304 @@ function initSecurityCodeToggle() {
         }
     });
 }
+
+// ==========================================
+// MINI ICON PICKER (untuk unified link rows)
+// ==========================================
+let miniPickerTargetRow = null;
+let miniIconsRendered   = false;
+
+function initMiniIconPicker() {
+    const picker    = document.getElementById("miniIconPicker");
+    const grid      = document.getElementById("miniIconGrid");
+    const searchEl  = document.getElementById("miniIconSearch");
+    const closeBtn  = document.getElementById("btnCloseMiniPicker");
+    if (!picker) return;
+
+    // Render ikon (gunakan data dari ICON_LIST + REMIX_ICON_LIST)
+    function renderMiniGrid(query = "") {
+        const all = [...ICON_LIST, ...REMIX_ICON_LIST];
+        const filtered = query
+            ? all.filter(ic => ic.name.includes(query) || ic.label.toLowerCase().includes(query))
+            : all;
+        grid.innerHTML = filtered.slice(0, 120).map(ic => {
+            const isFa  = ic.name.startsWith("ri-") || ic.name.startsWith("fa");
+            const isUrl = ic.name.startsWith("http") || ic.name.includes("/");
+            let html = isFa ? `<i class="${ic.name}"></i>` : `<i class="bi bi-${ic.name}"></i>`;
+            if (isUrl) html = `<img src="${ic.name}" style="width:16px;height:16px;object-fit:contain;">`;
+            return `<button type="button" class="mini-icon-item btn btn-sm btn-light p-1" title="${ic.label}" data-icon="${ic.name}"
+                            style="font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;height:36px;">
+                ${html}
+            </button>`;
+        }).join("");
+
+        grid.querySelectorAll(".mini-icon-item").forEach(btn => {
+            btn.addEventListener("click", () => {
+                selectMiniIcon(btn.dataset.icon);
+                hideMiniPicker();
+            });
+        });
+    }
+
+    if (!miniIconsRendered) {
+        renderMiniGrid();
+        miniIconsRendered = true;
+    }
+
+    if (searchEl) {
+        searchEl.addEventListener("input", () => renderMiniGrid(searchEl.value.trim().toLowerCase()));
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", hideMiniPicker);
+    }
+
+    document.addEventListener("click", (e) => {
+        if (!picker.classList.contains("d-none")
+            && !picker.contains(e.target)
+            && !e.target.closest(".btn-pick-icon")) {
+            hideMiniPicker();
+        }
+    });
+
+    // Delegasi klik tombol picker
+    document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".btn-pick-icon");
+        if (!btn) return;
+        miniPickerTargetRow = btn.closest(".link-row-item");
+        const rect = btn.getBoundingClientRect();
+        picker.style.top  = (rect.bottom + 4) + "px";
+        picker.style.left = Math.max(4, rect.left - 200) + "px";
+        picker.classList.remove("d-none");
+        picker.style.display = "flex";
+        if (searchEl) { searchEl.value = ""; renderMiniGrid(); searchEl.focus(); }
+    });
+}
+
+function selectMiniIcon(iconName) {
+    if (!miniPickerTargetRow) return;
+    const iconInput   = miniPickerTargetRow.querySelector(".link-icon-input");
+    const iconWrap    = miniPickerTargetRow.querySelector(".link-icon-preview-wrap");
+    const iconPreview = miniPickerTargetRow.querySelector(".link-icon-preview");
+    if (iconInput) iconInput.value = iconName;
+    updateRowIconPreview(iconName, iconPreview, iconWrap);
+}
+
+function hideMiniPicker() {
+    const picker = document.getElementById("miniIconPicker");
+    if (picker) { picker.classList.add("d-none"); picker.style.display = ""; }
+    miniPickerTargetRow = null;
+}
+
+// ==========================================
+// EXPIRED DATE VALIDATION (min = besok)
+// ==========================================
+function getTomorrow() {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
+}
+
+function initExpiredDateValidation() {
+    const tomorrow = getTomorrow();
+
+    // Set min attribute pada semua date input expired_at
+    ["cardExpiredAt", "cardExpiredAtEdit"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.min = tomorrow;
+    });
+
+    // Validasi saat nilai berubah (card unified form)
+    document.addEventListener("change", (e) => {
+        if (e.target.id === "cardExpiredAt" || e.target.id === "cardExpiredAtEdit") {
+            const errId = e.target.id === "cardExpiredAt" ? "cardExpiredAtError" : "cardExpiredAtEditError";
+            const errEl = document.getElementById(errId);
+            if (e.target.value && e.target.value < tomorrow) {
+                e.target.value = "";
+                errEl?.classList.remove("d-none");
+                setTimeout(() => errEl?.classList.add("d-none"), 3000);
+            } else {
+                errEl?.classList.add("d-none");
+            }
+        }
+        // Link expired_at di link rows
+        if (e.target.classList.contains("link-expired-input")) {
+            if (e.target.value && e.target.value < tomorrow) {
+                e.target.value = "";
+                const err = e.target.parentElement.querySelector(".link-expired-error");
+                if (err) { err.classList.remove("d-none"); setTimeout(() => err.classList.add("d-none"), 3000); }
+            }
+        }
+    });
+}
+
+// ==========================================
+// ARCHIVE MODAL LOGIC
+// ==========================================
+function initArchiveModal() {
+    const btnArchive = document.getElementById("btnArchiveModal");
+    if (!btnArchive) return;
+
+    btnArchive.addEventListener("click", () => {
+        const modal = new bootstrap.Modal(document.getElementById("archiveModal"));
+        modal.show();
+        loadArchive();
+    });
+
+    // Delegasi: Restore Card
+    document.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".btn-restore-card");
+        if (!btn) return;
+        await archiveAction(`/manage/cards/${btn.dataset.uuid}/restore`, "POST", "Kartu berhasil dipulihkan!");
+        loadArchive();
+    });
+
+    // Delegasi: Force Delete Card
+    document.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".btn-force-delete-card");
+        if (!btn) return;
+        const confirmed = await Swal.fire({
+            title: "Hapus Permanen?",
+            text: `"${btn.dataset.title}" akan dihapus selamanya dan tidak dapat dikembalikan.`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#dc3545",
+            confirmButtonText: "Ya, Hapus Permanen",
+            cancelButtonText: "Batal",
+        });
+        if (!confirmed.isConfirmed) return;
+        await archiveAction(`/manage/cards/${btn.dataset.uuid}/force`, "DELETE", "Kartu berhasil dihapus permanen.");
+        loadArchive();
+    });
+
+    // Delegasi: Restore Link
+    document.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".btn-restore-link");
+        if (!btn) return;
+        await archiveAction(`/manage/links/${btn.dataset.uuid}/restore`, "POST", "Tautan berhasil dipulihkan!");
+        loadArchive();
+    });
+
+    // Delegasi: Force Delete Link
+    document.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".btn-force-delete-link");
+        if (!btn) return;
+        const confirmed = await Swal.fire({
+            title: "Hapus Permanen?",
+            text: `"${btn.dataset.title}" akan dihapus selamanya.`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#dc3545",
+            confirmButtonText: "Ya, Hapus Permanen",
+            cancelButtonText: "Batal",
+        });
+        if (!confirmed.isConfirmed) return;
+        await archiveAction(`/manage/links/${btn.dataset.uuid}/force`, "DELETE", "Tautan berhasil dihapus permanen.");
+        loadArchive();
+    });
+}
+
+async function archiveAction(url, method, successMsg) {
+    try {
+        const res = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json", "Accept": "application/json", "X-CSRF-TOKEN": csrf() },
+        });
+        const data = await res.json();
+        if (data.success) {
+            Swal.fire({ toast: true, position: "top-end", icon: "success", title: successMsg, timer: 2000, showConfirmButton: false });
+        } else {
+            Swal.fire("Gagal", data.message ?? "Terjadi kesalahan.", "error");
+        }
+    } catch {
+        Swal.fire("Error", "Koneksi gagal.", "error");
+    }
+}
+
+async function loadArchive() {
+    const loading = document.getElementById("archiveLoading");
+    const content = document.getElementById("archiveContent");
+    if (loading) { loading.classList.remove("d-none"); }
+    if (content) { content.classList.add("d-none"); }
+
+    try {
+        const res  = await fetch("/manage/archived", { headers: { "Accept": "application/json", "X-CSRF-TOKEN": csrf() } });
+        const data = await res.json();
+
+        renderArchivedCards(data.archived_cards ?? []);
+        renderArchivedLinks(data.archived_links ?? []);
+
+        document.getElementById("archiveCardCount").textContent = (data.archived_cards ?? []).length;
+        document.getElementById("archiveLinkCount").textContent = (data.archived_links ?? []).length;
+
+        if (loading) loading.classList.add("d-none");
+        if (content) content.classList.remove("d-none");
+    } catch {
+        if (loading) loading.innerHTML = `<p class="text-danger py-4">Gagal memuat arsip.</p>`;
+    }
+}
+
+function renderArchivedCards(cards) {
+    const el = document.getElementById("archiveCardsList");
+    if (!el) return;
+    if (!cards.length) {
+        el.innerHTML = `<p class="text-muted text-center py-4">Tidak ada kartu yang dihapus.</p>`;
+        return;
+    }
+    el.innerHTML = cards.map(card => `
+        <div class="d-flex align-items-center justify-content-between p-3 border rounded mb-2 bg-light">
+            <div>
+                <div class="fw-bold"><i class="bi bi-card-heading me-1 text-muted"></i>${card.title}</div>
+                <small class="text-muted">Dihapus: ${card.deleted_at ? new Date(card.deleted_at).toLocaleDateString("id-ID") : "-"} &bull; ${card.links?.length ?? 0} tautan</small>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-success btn-restore-card"
+                        data-uuid="${card.uuid}" title="Pulihkan">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>Pulihkan
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-force-delete-card"
+                        data-uuid="${card.uuid}" data-title="${card.title}" title="Hapus Permanen">
+                    <i class="bi bi-trash3 me-1"></i>Hapus Permanen
+                </button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function renderArchivedLinks(links) {
+    const el = document.getElementById("archiveLinksList");
+    if (!el) return;
+    if (!links.length) {
+        el.innerHTML = `<p class="text-muted text-center py-4">Tidak ada tautan kadaluarsa atau terhapus.</p>`;
+        return;
+    }
+    el.innerHTML = links.map(link => {
+        const reason = link.deleted_at ? "Dihapus" : `Kadaluarsa: ${link.expired_at}`;
+        const cardTitle = link.card?.title ?? "-";
+        return `
+        <div class="d-flex align-items-center justify-content-between p-3 border rounded mb-2 bg-light">
+            <div>
+                <div class="fw-bold"><i class="bi bi-link-45deg me-1 text-muted"></i>${link.title}</div>
+                <small class="text-muted">${reason} &bull; Card: ${cardTitle}</small>
+                <div><a href="${link.url}" target="_blank" class="small text-truncate text-muted" style="max-width:300px;display:block;">${link.url}</a></div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-success btn-restore-link"
+                        data-uuid="${link.uuid}" title="Pulihkan">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>Pulihkan
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-force-delete-link"
+                        data-uuid="${link.uuid}" data-title="${link.title}" title="Hapus Permanen">
+                    <i class="bi bi-trash3 me-1"></i>Hapus Permanen
+                </button>
+            </div>
+        </div>
+    `}).join("");
+}
+
+// Tambahkan initMiniIconPicker, initExpiredDateValidation, initArchiveModal ke DOMContentLoaded
+document.addEventListener("DOMContentLoaded", () => {
+    initMiniIconPicker();
+    initExpiredDateValidation();
+    initArchiveModal();
+});
